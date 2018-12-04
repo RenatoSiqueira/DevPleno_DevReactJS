@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import Comments from './Comments'
 import NewComment from './NewComment'
 
+import { database } from './firebase'
+
 class App extends Component {
 
   state = {
@@ -16,6 +18,13 @@ class App extends Component {
     this.setState({
       comments: [...this.state.comments, comment],
       newComment: ''
+    })
+  }
+
+  componentDidMount() {
+    this.comments = database.ref('comments')
+    this.comments.on('value', snapshot => {
+      console.log(snapshot.val())
     })
   }
 
