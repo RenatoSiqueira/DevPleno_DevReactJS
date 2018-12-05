@@ -8,13 +8,16 @@ import { database } from './firebase'
 class App extends Component {
 
   state = {
-    comments: [
-      'Comment 1',
-      'Comment 2'
-    ]
+    comments: {},
+    isLoading: false
   }
 
   sendComment = comment => {
+    const id = database.ref().child('comments').push().key
+    const comments = {}
+    comments['comments/' + id] = {
+      comment
+    }
     this.setState({
       comments: [...this.state.comments, comment],
       newComment: ''
@@ -22,9 +25,10 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true })
     this.comments = database.ref('comments')
     this.comments.on('value', snapshot => {
-      console.log(snapshot.val())
+      this.setState({ comments: snapshot.val(), isLoading: false })
     })
   }
 
@@ -33,6 +37,9 @@ class App extends Component {
       <div>
         <NewComment sendComment={this.sendComment} />
         <Comments comments={this.state.comments}/>
+        {
+          this.state.isLoading && <p>Carregando...</p>
+        }
       </div>
     )
   }
