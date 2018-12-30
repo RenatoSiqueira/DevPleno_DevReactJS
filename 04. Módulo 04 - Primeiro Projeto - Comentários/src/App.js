@@ -3,23 +3,18 @@ import React, { Component } from 'react'
 import Comments from './Comments'
 import NewComment from './NewComment'
 
-import { database } from './firebase'
-
 class App extends Component {
-
   state = {
     comments: {},
     isLoading: false
   }
 
   sendComment = comment => {
+    const { database } = this.props
     const id = database.ref().child('comments').push().key
     const comments = {}
 
-    comments['comments/'+id] = {
-      comment
-    }
-
+    comments['comments/'+id] = {  comment }
     database.ref().update(comments)
 
     /*
@@ -31,6 +26,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const { database } = this.props
     this.setState({ isLoading: true })
     this.comments = database.ref('comments')
     this.comments.on('value', snapshot => {
