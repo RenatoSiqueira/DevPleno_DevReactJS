@@ -3,10 +3,13 @@ import React, { Component } from 'react'
 import Comments from './Comments'
 import NewComment from './NewComment'
 
+import Login from './Login'
+
 class App extends Component {
   state = {
     comments: {},
-    isLoading: false
+    isLoading: false,
+    isAuth: false
   }
 
   sendComment = comment => {
@@ -37,7 +40,12 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NewComment sendComment={this.sendComment} />
+        { !this.state.isAuth && <Login /> }
+        { 
+          this.state.isAuth &&
+          <NewComment sendComment={this.sendComment} />
+        }
+
         <Comments comments={this.state.comments}/>
         {
           this.state.isLoading && <p>Carregando...</p>
