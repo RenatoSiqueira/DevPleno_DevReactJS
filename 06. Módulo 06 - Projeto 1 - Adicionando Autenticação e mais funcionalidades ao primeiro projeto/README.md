@@ -4,6 +4,13 @@
 #### Projeto Comentários
 - Novas funcionalidades ao primeiro Projeto: Autenticação e relacionados, Criação de nova conta e melhorias no layout com bootstrap.
 
+
+### Anotações Importantes:
+```
+  [09:26] - HandleChange Coringa
+```
+
+
 ## firebase.js
 ```
 import firebase from 'firebase/app'
