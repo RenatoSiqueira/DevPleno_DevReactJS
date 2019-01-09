@@ -9,7 +9,9 @@ class App extends Component {
   state = {
     comments: {},
     isLoading: false,
-    isAuth: false
+    isAuth: false,
+    isAuthError: false,
+    authError: ''
   }
 
   sendComment = comment => {
@@ -28,19 +30,35 @@ class App extends Component {
     */
   }
 
+  login = async (email, passwd) => {
+    const { auth } = this.props
+    this.setState({ isAuthError: false, authError: '' })
+    try {
+      await auth.signInWithEmailAndPassword(email, passwd)
+    } catch(err){
+      this.setState({ authError: err.code, isAuthError: true })
+    }
+  }
+
   componentDidMount() {
-    const { database } = this.props
+    const { database, auth } = this.props
     this.setState({ isLoading: true })
     this.comments = database.ref('comments')
     this.comments.on('value', snapshot => {
       this.setState({ comments: snapshot.val(), isLoading: false })
+    })
+
+    auth.onAuthStateChanged(user => {
+      if(user){
+        this.setState({ isAuth: true, user })
+      }
     })
   }
 
   render() {
     return (
       <div>
-        { !this.state.isAuth && <Login /> }
+        { !this.state.isAuth && <Login login={this.login} /> }
         { 
           this.state.isAuth &&
           <NewComment sendComment={this.sendComment} />
