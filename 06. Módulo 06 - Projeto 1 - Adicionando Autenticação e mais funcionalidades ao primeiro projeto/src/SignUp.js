@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Login extends Component {
+class SignUp extends Component {
     state = {
         email: '',
         passwd: ''
@@ -12,31 +12,31 @@ class Login extends Component {
         })
     }
 
-    login = () => {
-        this.props.login(this.state.email, this.state.passwd)
+    createAccount = () => {
+        this.props.createAccount(this.state.email, this.state.passwd)
     }
 
     render() {
         const errorMessages = {
-            'auth/wrong-password': 'Email e/ou Senha Inválidos.',
-            'auth/user-not-found': 'Usuário não encontrado',
+            'auth/weak-password': 'Senha Sem Segurança',
+            'auth/email-already-in-use': 'Usuário já cadastrado',
             'auth/invalid-email': 'Email inválido'
         }
         return (
-            <div >
-                <h4>Entre para Comentar</h4>
+            <div>
+                <h4>Criar Conta</h4>
                 <form className='form-inline'>
                     <input className='form-control mr-1' type='text' onChange={this.handleChange('email')} placeholder='email' />
                     <input className='form-control mr-1' type='password' onChange={this.handleChange('passwd')} placeholder='senha' />
-                    <button className='btn btn-primary' type='button' onClick={this.login}>Entrar</button>
-                    <button className='btn' onClick={() => this.props.changeScreen('signup')}>Criar Conta</button>
+                    <button className='btn btn-primary' type='button' onClick={this.createAccount}>Criar Conta</button>
+                    <button className='btn' onClick={() => this.props.changeScreen('login')}>Já tenho uma conta</button>
                 </form>
                 {
-                    this.props.isAuthError &&
+                    this.props.isSignUpError &&
                     <div className='card text-white bg-danger mt-3'>
-                        <div className='card-header'> Erro ao Entrar</div>
+                        <div className='card-header'> Erro ao Cadastrar</div>
                         <div className='card-body'>
-                            {errorMessages[this.props.authError]}
+                            {errorMessages[this.props.signUpError]}
                         </div>
                     </div>
                 }
@@ -45,4 +45,4 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default SignUp
