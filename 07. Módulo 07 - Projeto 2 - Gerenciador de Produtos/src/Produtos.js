@@ -14,6 +14,7 @@ class Produtos extends Component {
       categorias: []
     }
 
+    this.renderCategoria = this.renderCategoria.bind(this)
     this.loadCategorias = this.loadCategorias.bind(this)
     this.handleNewCategoria = this.handleNewCategoria.bind(this)
   }
@@ -25,9 +26,19 @@ class Produtos extends Component {
   componentDidMount() {
     this.loadCategorias()
   }
+  removeCategoria(categoria) {
+    axios
+      .delete('http://localhost:3001/categorias/' + categoria.id)
+      .then(res => {
+        this.loadCategorias()
+      })
+  }
   renderCategoria(cat) {
     return (
       <li key={cat.id}>
+        <button className='btn btn-small btn-danger' onClick={() => this.removeCategoria(cat)}>
+          X
+        </button>
         <Link to={`/produtos/categoria/${cat.id}`}>{cat.categoria}</Link>
       </li>
     )
@@ -51,9 +62,10 @@ class Produtos extends Component {
         <div className='col-md-2'>
           <h3>Categorias</h3>
           <ul>{categorias.map(this.renderCategoria)}</ul>
-          <div className='card'>
+          <div className='well'>
             <input
               onKeyUp={this.handleNewCategoria}
+              className='form-control'
               type='text'
               ref='categoria'
               placeholder='Nova Categoria'
