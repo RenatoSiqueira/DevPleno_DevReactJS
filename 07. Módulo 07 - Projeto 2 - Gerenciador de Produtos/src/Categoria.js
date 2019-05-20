@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class Categoria extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class Categoria extends Component {
             id: null
         }
         this.loadData = this.loadData.bind(this)
+        this.renderProduto = this.renderProduto.bind(this)
     }
     loadData(id) {
         this.setState({ id })
@@ -26,9 +28,16 @@ class Categoria extends Component {
     }
     renderProduto(produto) {
         return (
-            <div class='card' key={produto.id}>
-                <div class='card-body'>
+            <div className='card' key={produto.id}>
+                <div className='card-body'>
                     <p>{produto.produto}</p>
+                    <button
+                        className='btn btn-danger'
+                        onClick={() => {
+                            this.props.removeProduto(produto)
+                                .then(res => this.loadData(this.props.match.params.catId))
+                        }}>Excluir</button>
+                    <Link to={'/produtos/editar/' + produto.id} >Editar</Link>
                 </div>
             </div>
         )
@@ -36,7 +45,14 @@ class Categoria extends Component {
     render() {
         return (
             <div>
-                <h1>{this.props.categoria.categoria}</h1>
+                {
+                    this.props.categoria &&
+                    <h1>{this.props.categoria.categoria}</h1>
+                }
+                {
+                    this.props.produtos.length === 0 &&
+                    <p className='alert alert-danger'>Nenhum produto</p>
+                }
                 {
                     this.props.produtos.map(this.renderProduto)
                 }
