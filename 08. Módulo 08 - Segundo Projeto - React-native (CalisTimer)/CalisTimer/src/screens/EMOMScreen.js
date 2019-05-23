@@ -1,74 +1,45 @@
-import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
-class Select extends Component {
-    state = {
-        current: 'Opt1'
-    }
-    handlePress = opt => () => {
-        this.setState({ current: opt })
-        if (this.props.onSelect)
-            this.props.onSelect(opt)
-    }
-    render() {
-        const { options, label } = this.props
-        const { current } = this.state
-        return (
-            <View style={{ flex: 1 }}>
-                <Text style={stylesSelect.label}>{label}</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    {
-                        options.map(opt => {
-                            return (
-                                <TouchableOpacity
-                                    key={opt}
-                                    onPress={this.handlePress(opt)}
-                                    style={[stylesSelect.opt, opt === current ? stylesSelect.optSelected : null]}
-                                >
-                                    <Text style={stylesSelect.optLabel}>{opt}</Text>
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
-                </View>
-            </View>
-        )
-    }
-}
-
-const stylesSelect = StyleSheet.create({
-    label: {
-        textAlign: 'center',
-        color: 'white',
-        fontFamily: 'Ubuntu-Regular',
-        fontSize: 24
-    },
-    opt: {
-        padding: 8
-    },
-    optSelected: {
-        backgroundColor: 'rgba(255,255,255,0.6)'
-    },
-    optLabel: {
-        color: 'white',
-        fontFamily: 'Ubuntu-Regular',
-        fontSize: 24,
-        opacity: 1
-    }
-})
+import Select from '../components/Select'
+import Title from '../components/Title'
 
 const EMOMScreen = props => {
     return (
         <View style={styles.container}>
-            <Text>EMONScreen</Text>
+            <Title title='EMOM' subTitle='Every Minute On The Minute' />
             <Select
                 label='Alertas'
-                options={['Off', '15s', '30s', '45s']}
+                current={0}
+                options={[{
+                    id: 0,
+                    label: 'Off'
+                },
+                {
+                    id: 15,
+                    label: '15s'
+                },
+                {
+                    id: 30,
+                    label: '30s'
+                },
+                {
+                    id: 45,
+                    label: '45s'
+                }]}
                 onSelect={opt => console.log(opt)}
             />
             <Select
                 label='Contagem Regressiva'
-                options={['Sim', 'Não']}
+                current={1}
+                options={[
+                    {
+                        id: 0,
+                        label: 'Sim'
+                    }, {
+                        id: 1,
+                        label: 'Não'
+                    }]}
                 onSelect={opt => console.log(opt)}
             />
         </View>
