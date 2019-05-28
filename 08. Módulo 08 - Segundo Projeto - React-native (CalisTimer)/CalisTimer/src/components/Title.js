@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native'
 
 const Title = props => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, props.style]}>
             <Text style={styles.title}>{props.title}</Text>
-            <Text style={styles.subTitle}>{props.subtitle}</Text>
+            <Text style={styles.subTitle}>{props.subTitle}</Text>
         </View>
     )
 }
