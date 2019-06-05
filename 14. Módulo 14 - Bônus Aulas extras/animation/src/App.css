@@ -31,3 +31,21 @@
     transform: rotate(360deg);
   }
 }
+
+.anim-enter {
+  opacity: 0.01;
+}
+
+.anim-enter.anim-enter-active {
+  opacity: 1;
+  transition: all 500ms ease-in;
+}
+
+.anim-leave {
+  opacity: 1;
+}
+
+.anim.leave.anim-leave-active {
+  opacity: 0.01;
+  transition: all 1000ms ease-in;
+}
