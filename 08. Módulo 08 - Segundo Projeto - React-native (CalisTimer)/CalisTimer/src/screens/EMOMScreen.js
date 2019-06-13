@@ -6,11 +6,14 @@ import Title from '../components/Title'
 import Time from '../components/Time'
 import ProgressBar from '../components/ProgressBar'
 import BackgroundProgress from '../components/BackgroundProgress'
+import Sound from 'react-native-sound'
+
+const alert = require('../../assets/sounds/alert.wav')
 
 class EMOMScreen extends Component {
     state = {
         keyboardIsVisible: false,
-        alerts: 0,
+        alerts: [0, 15],
         countdown: 1,
         time: '2',
 
@@ -19,34 +22,50 @@ class EMOMScreen extends Component {
         count: 0
     }
     componentDidMount() {
+        Sound.setCategory('Playback', true)
+        this.alert = new Sound(alert)
+
         this.kbShow = Keyboard.addListener('keyboardDidShow', () => this.setState({ keyboardIsVisible: true }))
         this.kbHide = Keyboard.addListener('keyboardDidHide', () => this.setState({ keyboardIsVisible: false }))
-        this.play()
     }
     componentWillUnmount() {
         this.kbShow.remove()
         this.kbHide.remove()
     }
+    playAlert = () => {
+        const resto = this.state.count % 60
+        if (this.state.alerts.indexOf(resto) >= 0) {
+            this.alert.play()
+        }
+        if (this.state.countdown === 1) {
+            if (resto >= 55 && resto < 60) {
+                this.alert.play()
+            }
+        }
+    }
     play = () => {
         this.setState({ isRunning: true })
         const count = () => {
             this.setState({ count: this.state.count + 1 }, () => {
+                this.playAlert()
                 if (this.state.count === parseInt(this.state.time) * 60) {
                     clearInterval(this.countTimer)
                 }
             })
         }
         if (this.state.countdown === 1) {
+            this.alert.play()
             this.countdownTimer = setInterval(() => {
+                this.alert.play()
                 this.setState({ countdownValue: this.state.countdownValue - 1 }, () => {
                     if (this.state.countdownValue === 0) {
                         clearInterval(this.countdownTimer)
-                        this.countTimer = setInterval(count, 100)
+                        this.countTimer = setInterval(count, 1000)
                     }
                 })
             }, 1000)
         } else {
-            this.countTimer = setInterval(count, 100)
+            this.countTimer = setInterval(count, 1000)
         }
     }
     render() {
@@ -81,7 +100,7 @@ class EMOMScreen extends Component {
                             current={this.state.alerts}
                             options={[{
                                 id: 0,
-                                label: 'Off'
+                                label: '0s'
                             },
                             {
                                 id: 15,
