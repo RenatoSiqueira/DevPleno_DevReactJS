@@ -11,9 +11,35 @@ class Select extends Component {
         })
     }
     handlePress = opt => () => {
-        this.setState({ current: opt })
-        if (this.props.onSelect)
-            this.props.onSelect(opt)
+        const { current } = this.state
+        if (Array.isArray(current)) {
+            let newCurrent = current
+
+            const i = current.indexOf(opt)
+            if (i >= 0) {
+                newCurrent = [...current]
+                newCurrent.splice(i, 1)
+            } else {
+                newCurrent = [...current, opt]
+            }
+
+            this.setState({ current: newCurrent })
+            if (this.props.onSelect)
+                this.props.onSelect(opt)
+
+        } else {
+            this.setState({ current: opt })
+            if (this.props.onSelect)
+                this.props.onSelect(opt)
+        }
+
+    }
+    checkItem = item => {
+        const { current } = this.state
+        if (Array.isArray(current)) {
+            return current.indexOf(item) >= 0
+        }
+        return current === item
     }
     render() {
         const { options, label } = this.props
@@ -38,7 +64,7 @@ class Select extends Component {
                                 <TouchableOpacity
                                     key={id}
                                     onPress={this.handlePress(id)}
-                                    style={[stylesSelect.opt, id === current ? stylesSelect.optSelected : null]}
+                                    style={[this.checkItem(id) ? stylesSelect.optSelected : null]}
                                 >
                                     <Text style={stylesSelect.optLabel}>{label}</Text>
                                 </TouchableOpacity>
