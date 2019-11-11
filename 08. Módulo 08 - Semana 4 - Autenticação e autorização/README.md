@@ -4,7 +4,7 @@
 - Aula 01: Autenticação e autorização
 - Aula 02: JWT e Firebase
 - Aula 03: Autorização no Firebase
-- Aula 04: Login no My Money
+- Aula 04: Login no [My Money](https://github.com/RenatoSiqueira/DevReactJs-My_Money)
 - Aula 05: Manipulação de erros
 - Aula 06: Manipulação de erros no Axios
 - Aula 07: Refactoring (parte 1)
